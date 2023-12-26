@@ -68,7 +68,7 @@ def read_image(path: str) -> (list, dict):
     """
     if not isinstance(path, str):
         raise TypeError('path must be string')
-    if not os.path.isfile('path'):
+    if not os.path.isfile(path):
         raise ValueError('file not exist')
     
     image = Image.open(path)
@@ -81,13 +81,23 @@ def read_image(path: str) -> (list, dict):
     metadata = image.info
     return (pixels, metadata)
 
+def save_model(path: str) -> None:
+    """
+    function saves model from an image with it.
+    returns noting
+    Arguments:
+        path    -- path to image, must be string
+    """
+    image, metadata = read_image(path)
+    length = int(metadata['length'])
+    model_bytes = bytes(image[:length])
+    with open('model_from_image.pkl', 'wb') as model:
+        model.write(model_bytes)
+
 if __name__ == '__main__':
     model_path: str = 'random_forest_model.pkl'
-    image_path: str = 'protonmail-asimage.png'
+    image_path: str = 'output.png'
 
     save_image(model_path)
 
-    obraz, metadata = read_image(image_path)
-    length = int(metadata['length'])
-    model = get_byte_list(model_path)
-    print(obraz[:length] == model)
+    save_model(image_path)
