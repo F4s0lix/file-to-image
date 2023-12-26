@@ -1,23 +1,46 @@
 from PIL import Image
 from PIL.PngImagePlugin import PngInfo
 from math import sqrt, ceil
+import os
 
-def get_byte_list(name: str) -> list:
-    with open(name, 'rb') as model:
+def get_byte_list(path: str) -> list:
+    """
+        returns a list of integer representation of bytes in model file
+        Arguments:
+        name    -- path to model file, must be string
+    """
+    if not isinstance(path, str):
+        raise TypeError('name must be string')
+    if not os.path.isfile(path):
+        raise ValueError('file not exist')
+    
+    with open(path, 'rb') as model:
         model = model.read()
     return [b for b in model]
 
-def save_image(name: str):
+def save_image(path: str):
+    """
+        returns nothing
+        function saves image from model with length of original file in EXIF
+        Arguments:
+        path    -- path to model file, must be string
+    """
+
+    if not isinstance(path, str):
+        raise TypeError('path must be string')
+    if not os.path.isfile(path):
+        raise ValueError('file not exist')
+
     metadata = {}
     
-    with open(name, 'rb') as model:
+    with open(path, 'rb') as model:
         raw_data = model.read()
     
     #trying to make square
-    width = ceil(sqrt(len(raw_data)))
-    height = ceil(sqrt(len(raw_data)))
-    pixels = width * height
-    raw_data_length = len(raw_data)
+    width = ceil(sqrt(len(raw_data))) #width of image
+    height = ceil(sqrt(len(raw_data))) #height of image
+    pixels = width * height #how many pixels are
+    raw_data_length = len(raw_data) 
     #saving size of original model in exif of photo
     metadata['length'] = str(raw_data_length)
 
@@ -35,7 +58,19 @@ def save_image(name: str):
         info.add_text(key, value)
     image.save('output.png', pnginfo=info)
 
-def read_image(path: str):
+def read_image(path: str) -> (list, dict):
+    """
+        return tuple with 2 values:
+            list of integer representation of byte
+            dict with image EXIF
+        Arguments:
+        path    -- path to image, must be string
+    """
+    if not isinstance(path, str):
+        raise TypeError('path must be string')
+    if not os.path.isfile('path'):
+        raise ValueError('file not exist')
+    
     image = Image.open(path)
     width, height = image.size
     pixels = []
@@ -43,17 +78,16 @@ def read_image(path: str):
         for x in range(width):
             pixels.append(image.getpixel((x, y)))
 
-    length = image.info
-    print(length)
-    return (pixels, length)
+    metadata = image.info
+    return (pixels, metadata)
 
 if __name__ == '__main__':
-    name: str = 'random_forest_model.pkl'
-    image: str = 'protonmail-asimage.png'
+    model_path: str = 'random_forest_model.pkl'
+    image_path: str = 'protonmail-asimage.png'
 
-    save_image(name)
+    save_image(model_path)
 
-    obraz, metadata = read_image(image)
+    obraz, metadata = read_image(image_path)
     length = int(metadata['length'])
-    model = get_byte_list(name)
-    print(obraz[:1704753] == model)
+    model = get_byte_list(model_path)
+    print(obraz[:length] == model)
