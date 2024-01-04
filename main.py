@@ -18,7 +18,7 @@ class fileToImage:
             model = model.read()
         return [b for b in model]
 
-    def save_image(self, path: str):
+    def save_image(self, path: str) -> None:
         """
             returns nothing
             function saves image from file with length of original file in EXIF
