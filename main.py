@@ -113,7 +113,7 @@ class fileToImage:
         return file_bytes == img_bytes[:length]
 
 if __name__ == '__main__':
-    model_path: str = 'random_forest_model.pkl'
-    image_path: str = 'output.png'
+    file_path: str = './share-tests/random_forest_model.pkl'
+    image_path: str = './share-tests/output.png'
     fti = fileToImage()
-    print(fti.check_if_correct('output.png', 'model_from_image.pkl'))
+    print(fti.check_if_correct(image_path, file_path))
