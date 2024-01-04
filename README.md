@@ -11,7 +11,7 @@ Can we save AI model as an PNG image?
   With both informations we can see that we can save each byte of model as next pixels in PNG.<br>
   But we have one issue:
 
-If model is 9999B we can't have image this size. Nearest size is 100x100px. Solution to this issue is adding *x00* to the end of model and length of original model
+If model is 9999B we can't have image this size. Nearest size is 100x100px. Solution to this issue is adding *\x00* to the end of model and length of original model
 to EXIF of image. 
 
 ---
