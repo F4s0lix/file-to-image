@@ -16,7 +16,7 @@ Can we save files as an PNG image?
 If file is 9999B we can't have image this size. Nearest size is 100x100px. Solution to this issue is adding *\x00* to the end of byte stream and length of original file to EXIF of image. 
 
 ---
-But how it affect model?
+But how it affect files?
 ---
 If PNG was not compressed, converted to another mode (for example RGBA) or EXIF truncated only affected thing is size.
 | file | size |
